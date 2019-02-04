@@ -2,8 +2,12 @@
 
 import time
 import sqlite3
+from typing import Dict
 
-def read_stats():
+Stats = Dict[str, Dict[str, int]]
+Diff = Dict[str, Dict[str, int]]
+
+def read_stats() -> Stats:
     lines = open("/proc/net/dev").readlines()
     top_labels = [chunk.lower().strip() for chunk in lines[0].split("|")][1:]
     item_labels = [chunk.split() for chunk in lines[1].split("|")][1:]
@@ -19,7 +23,7 @@ def read_stats():
         data[interface] = dict(zip(combined_labels, numbers))
     return data
 
-def compute_diff(previous, current):
+def compute_diff(previous: Stats, current: Stats) -> Diff:
     diff = {}
     for interface, current_values in current.items():
         if interface not in previous:
@@ -37,7 +41,7 @@ def compute_diff(previous, current):
         }
     return diff
 
-def save_diff(filename, diff, previous_timestamp, timestamp):
+def save_diff(filename: str, diff: Diff, previous_timestamp: float, timestamp: float) -> None:
     if not diff:
         return
     conn = sqlite3.connect(filename)
@@ -58,7 +62,7 @@ def save_diff(filename, diff, previous_timestamp, timestamp):
     conn.commit()
     conn.close()
 
-def create_table(filename):
+def create_table(filename: str) -> None:
     sql = """
 CREATE TABLE IF NOT EXISTS traffic (
 	timestamp_begin INT NOT NULL,
@@ -75,7 +79,7 @@ CREATE TABLE IF NOT EXISTS traffic (
     conn.commit()
     conn.close()
 
-def main():
+def main() -> None:
     import argparse
     import logging
     parser = argparse.ArgumentParser(
