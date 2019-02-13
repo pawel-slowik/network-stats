@@ -2,10 +2,10 @@
 
 import time
 import sqlite3
-from typing import Dict
+from typing import Mapping
 
-Stats = Dict[str, Dict[str, int]]
-Diff = Dict[str, Dict[str, int]]
+Stats = Mapping[str, Mapping[str, int]]
+Diff = Mapping[str, Mapping[str, int]]
 
 def read_stats() -> Stats:
     lines = open("/proc/net/dev").readlines()
