@@ -7,6 +7,7 @@ from typing import Mapping
 Stats = Mapping[str, Mapping[str, int]]
 Diff = Mapping[str, Mapping[str, int]]
 
+
 def read_stats() -> Stats:
     lines = open("/proc/net/dev").readlines()
     top_labels = [chunk.lower().strip() for chunk in lines[0].split("|")][1:]
@@ -22,6 +23,7 @@ def read_stats() -> Stats:
         numbers = [int(n) for n in parts[1:]]
         data[interface] = dict(zip(combined_labels, numbers))
     return data
+
 
 def compute_diff(previous: Stats, current: Stats) -> Diff:
     diff = {}
@@ -40,6 +42,7 @@ def compute_diff(previous: Stats, current: Stats) -> Diff:
             "bytes_sent": sent,
         }
     return diff
+
 
 def save_diff(filename: str, diff: Diff, previous_timestamp: float, timestamp: float) -> None:
     if not diff:
@@ -62,6 +65,7 @@ def save_diff(filename: str, diff: Diff, previous_timestamp: float, timestamp: f
     conn.commit()
     conn.close()
 
+
 def create_table(filename: str) -> None:
     sql = """
 CREATE TABLE IF NOT EXISTS traffic (
@@ -78,6 +82,7 @@ CREATE TABLE IF NOT EXISTS traffic (
     cursor.execute(sql)
     conn.commit()
     conn.close()
+
 
 def main() -> None:
     import argparse
@@ -105,6 +110,7 @@ def main() -> None:
         previous_stats = stats
         previous_timestamp = timestamp
         time.sleep(10)
+
 
 if __name__ == "__main__":
     main()
