@@ -11,7 +11,7 @@ Diff = Mapping[str, Mapping[str, int]]
 
 
 def read_stats() -> Stats:
-    lines = open("/proc/net/dev").readlines()
+    lines = open("/proc/net/dev", encoding="us-ascii").readlines()
     top_labels = [chunk.lower().strip() for chunk in lines[0].split("|")][1:]
     item_labels = [chunk.split() for chunk in lines[1].split("|")][1:]
     combined_labels = []
