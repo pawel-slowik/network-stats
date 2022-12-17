@@ -59,10 +59,9 @@ def save_diff(filename: str, diff: Diff, previous_timestamp: float, timestamp: f
             "bytes_sent": values["bytes_sent"],
             "bytes_received": values["bytes_received"],
         }
-        query = "INSERT INTO traffic (%s) VALUES (%s)" % (
-            ", ".join(entry.keys()),
-            ", ".join(":" + key for key in entry),
-        )
+        column_names = ", ".join(entry.keys())
+        column_placeholders = ", ".join(":" + key for key in entry)
+        query = f"INSERT INTO traffic ({column_names}) VALUES ({column_placeholders})"
         cursor.execute(query, entry)
     conn.commit()
     conn.close()
