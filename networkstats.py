@@ -2,6 +2,8 @@
 
 import time
 import sqlite3
+import argparse
+import logging
 from typing import Mapping
 
 Stats = Mapping[str, Mapping[str, int]]
@@ -85,8 +87,6 @@ CREATE TABLE IF NOT EXISTS traffic (
 
 
 def main() -> None:
-    import argparse
-    import logging
     parser = argparse.ArgumentParser(
         description="Log Linux network traffic statistics into a SQLite database"
     )
