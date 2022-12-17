@@ -1,4 +1,5 @@
 ![Build Status][build-badge]
+
 [build-badge]: https://github.com/pawel-slowik/network-stats/workflows/tests/badge.svg
 
 This script periodically reads Linux network traffic statistics from
