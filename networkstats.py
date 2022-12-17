@@ -4,14 +4,18 @@ import time
 import sqlite3
 import argparse
 import logging
-from typing import Mapping
+from typing import Mapping, Sequence
 
 Stats = Mapping[str, Mapping[str, int]]
 Diff = Mapping[str, Mapping[str, int]]
 
 
 def read_stats() -> Stats:
-    lines = open("/proc/net/dev", encoding="us-ascii").readlines()
+    with open("/proc/net/dev", encoding="us-ascii") as input_file:
+        return parse_stats(input_file.readlines())
+
+
+def parse_stats(lines: Sequence[str]) -> Stats:
     top_labels = [chunk.lower().strip() for chunk in lines[0].split("|")][1:]
     item_labels = [chunk.split() for chunk in lines[1].split("|")][1:]
     combined_labels = []
